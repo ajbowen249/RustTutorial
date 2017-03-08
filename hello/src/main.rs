@@ -10,6 +10,17 @@ fn main() {
         Ok(max) => println!("max: {}", max),
         Err(err) => println!("Error: {}", err),
     }
+
+    match first_even(&nums) {
+        Some(first) => println!("first even number in set: {}", first),
+        None => println!("All numbers in the set are odd."),
+    }
+
+    let odd_nums = vec![1, 3, 5, 7, 9, 11];
+    match first_even(&odd_nums) {
+        Some(first) => println!("first even number in set: {}", first),
+        None => println!("All numbers in the set are odd."),
+    }
 }
 
 fn find_max(nums: &Vec<i32>) -> Result<i32, &str> {
@@ -26,4 +37,14 @@ fn find_max(nums: &Vec<i32>) -> Result<i32, &str> {
     }
 
     Ok(max)
+}
+
+fn first_even(nums: &Vec<i32>) -> Option<i32> {
+    for num in nums {
+        if *num % 2 == 0 {
+            return Some(*num);
+        }
+    }
+
+    None
 }

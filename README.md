@@ -12,8 +12,8 @@
 - Traits
 
 #### What makes Rust Rust
-- Options / Results (Parse command line input)
-- Match
+- Options / Results (Parse command line input) [DONE]
+- Match [DONE]
 
 #### Example
 - Pull together concepts
@@ -229,4 +229,32 @@ The concept here is exactly the same, only for the error message. Since we hardc
     max: 42
     Error: Vector is empty!
     bash-3.2$
-    
+
+Add this function:
+```rust
+fn first_even(nums: &Vec<i32>) -> Option<i32> {
+    for num in nums {
+        if *num % 2 == 0 {
+            return Some(*num);
+        }
+    }
+
+    None
+}
+```
+
+Add this to the end of the `main()` function:
+```rust
+    match first_even(&nums) {
+        Some(first) => println!("first even number in set: {}", first),
+        None => println!("All numbers in the set are odd."),
+    }
+
+    let odd_nums = vec![1, 3, 5, 7, 9, 11];
+    match first_even(&odd_nums) {
+        Some(first) => println!("first even number in set: {}", first),
+        None => println!("All numbers in the set are odd."),
+    }
+```
+
+Here, we have another thing very closely related to the `Result` called the `Option`, which should by familiar to any Swift developers. `first_even` may be given a vector that has no even numbers, so it gives us `None` in that case. Where `Result`s are used to bake failure into the type system, `Option`s do the same for valid presence or absense of a value in a way for more robust and obvious than returning `null`, while also distinguishing `null` as a valid value when necessary.
