@@ -257,4 +257,4 @@ Add this to the end of the `main()` function:
     }
 ```
 
-Here, we have another thing very closely related to the `Result` called the `Option`, which should by familiar to any Swift developers. `first_even` may be given a vector that has no even numbers, so it gives us `None` in that case. Where `Result`s are used to bake failure into the type system, `Option`s do the same for valid presence or absense of a value in a way for more robust and obvious than returning `null`, while also distinguishing `null` as a valid value when necessary.
+Here, we have another thing very closely related to the `Result` called the `Option`, which should by familiar to any Swift developers. `first_even` may be given a vector that has no even numbers, so it gives us `None` in that case. Where `Result`s are used to bake failure into the type system, `Option`s do the same for valid presence or absense of a value in a way for more robust and obvious than returning `null`, while also distinguishing `null` as a valid value when necessary. It's not uncommon to see `Result<Opton<TV>, TE>` or `Option<Result<TE, TV>>` when necessary.
