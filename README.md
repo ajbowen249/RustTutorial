@@ -58,7 +58,7 @@ fn main() {
     println!("Hello, world!");
 }
 ```
-This should all be pretty self-explanatory. The most iteresting thing is the exclaimation point and the end of `println!`. When you see a `!` in a Rust function call, you're actually calling a macro. Rust has a very robust macro system that supplements syntactic ease that many languages achieve by relaxing type safety. 
+This should all be pretty self-explanatory. The most iteresting thing is the exclaimation point and the end of `println!`. When you see an `!` in a Rust function call, you're actually calling a macro. Rust has a very robust macro system that supplements syntactic ease that many languages achieve by relaxing type safety. 
 
 Rust's basic syntax is primarily c-like. Add this to your *main.rs*:
 ```rust
@@ -135,7 +135,7 @@ If you try to `cargo run`, you'll get this compiler error:
     
     To learn more, run the command again with --verbose.
 
-The error `use of moved value: nums` demonstrates three closely-related Rust concepts: ownership, borrowing and moving. First, let's fix our error. Add an `&` before `Vec<i32>` in our function signator, and another `&` before `nums` when we call it. The repaired lines should look like:
+The error `use of moved value: nums` demonstrates three closely-related Rust concepts: ownership, borrowing and moving. First, let's fix our error. Add an `&` before `Vec<i32>` in our function signature, and another `&` b!efore `nums` when we call it. The repaired lines should look like:
 ```rust
     let max_index = find_max_index(&nums);
 ```
@@ -257,4 +257,4 @@ Add this to the end of the `main()` function:
     }
 ```
 
-Here, we have another thing very closely related to the `Result` called the `Option`, which should by familiar to any Swift developers. `first_even` may be given a vector that has no even numbers, so it gives us `None` in that case. Where `Result`s are used to bake failure into the type system, `Option`s do the same for valid presence or absense of a value in a way for more robust and obvious than returning `null`, while also distinguishing `null` as a valid value when necessary. It's not uncommon to see `Result<Opton<TV>, TE>` or `Option<Result<TE, TV>>` when necessary.
+Here, we have another thing very closely related to the `Result` called the `Option`, which should by familiar to any Swift developers. `first_even` may be given a vector that has no even numbers, so it gives us `None` in that case. Where `Result`s are used to bake failure into the type system, `Option`s do the same for valid presence or absense of a value in a way far more robust and obvious than returning `null`, while also distinguishing `null` as a valid value when necessary. It's not uncommon to see `Result<Opton<TV>, TE>` or `Option<Result<TV, TE>>` when appropriate.
