@@ -60,6 +60,7 @@ fn main() {
 ```
 This should all be pretty self-explanatory. The most iteresting thing is the exclaimation point and the end of `println!`. When you see an `!` in a Rust function call, you're actually calling a macro. Rust has a very robust macro system that supplements syntactic ease that many languages achieve by relaxing type safety. 
 
+### Let's do a Rust
 Rust's basic syntax is primarily c-like. Add this to your *main.rs*:
 ```rust
     let x = 12;
@@ -258,3 +259,74 @@ Add this to the end of the `main()` function:
 ```
 
 Here, we have another thing very closely related to the `Result` called the `Option`, which should by familiar to any Swift developers. `first_even` may be given a vector that has no even numbers, so it gives us `None` in that case. Where `Result`s are used to bake failure into the type system, `Option`s do the same for valid presence or absense of a value in a way far more robust and obvious than returning `null`, while also distinguishing `null` as a valid value when necessary. It's not uncommon to see `Result<Opton<TV>, TE>` or `Option<Result<TV, TE>>` when appropriate.
+
+Rust has integrated syntactical support for tuples:
+```rust
+    let tuple = (1, 'a', "tuple", 15.35);
+    println!("tuple 0: {}", tuple.0);
+    println!("tuple 1: {}", tuple.1);
+    println!("tuple 2: {}", tuple.2);
+    println!("tuple 3: {}", tuple.3);
+```
+You can mix and match any type you'd like in a tuple. Remember when I said that **expressions** all have a value? An **expression**'s default value is `()`, an empty tuple. Like many moden languages, tuples can be destructured:
+```rust
+    let (int, character, float) = (12, 'b', 1.23);
+    println!("int: {}", int);
+    println!("character: {}", character);
+    println!("float: {}", float);
+```
+Using destructuring, you can effectively return an arbitrary number of values from a function. Here's a modified `first_even` (without error handling):
+```rust
+fn first_even_with_index(nums: &Vec<i32>) -> (i32, usize) {
+    for i in 0..nums.len() {
+        if nums[i] % 2 == 0 {
+            return (nums[i], i);
+        }
+    }
+
+    (0, 0)
+}
+```
+Call it like this:
+```rust
+    let (value, index) = first_even_with_index(&nums);
+    println!("first even: {} at index {}", value, index);
+```
+Rust has good support for closures and functional programming. The easiest way to show these is by showing off iterator **consumers**, which is Rust's term for higher-order functions that operate on collections (kind of like Linq for any .NET familiars). Let's use these concepts to rework `first_even` again:
+```rust
+    match nums.iter().find(|x| *x % 2 == 0) {
+        Some(first) => println!("first even number in set: {}", first),
+        None => println!("All numbers in the set are odd."),
+    }
+```
+Calling `.iter()` on our `nums` vector gives us an iterator. `find()` is a higher-order function that returns an `Option` with the first element of `nums` matching the lambda expression. Let's try a more complicated lambda:
+```rust
+fn find_nth_even(nums: &Vec<i32>, n: i32) -> Option<&i32> {
+    let mut num_found = -1;
+    nums.iter().find(|x| {
+        if **x % 2 == 0 {
+            num_found = num_found + 1;
+        }
+
+        num_found == n
+    })
+}
+```
+This illustrates the syntax a bit better. The first closure we saw was a **predicate**, which only had the single line with the single expression. The second one we saw was a lot more like a function, but with `|` around the argument list instead of `(` and `)`. Since the two closures we saw were arguments to another function whose signature says exactly what it wants, we didn't need to provide the type hint. If we want a variable binding to a closure, we can do that like this:
+```rust
+fn find_nth_even(nums: &Vec<i32>, n: i32) -> Option<&i32> {
+    let mut num_found = -1;
+    let nth_closure = |x: &&i32| -> bool {
+        if **x % 2 == 0 {
+            num_found = num_found + 1;
+        }
+
+        num_found == n
+    };
+
+    nums.iter().find(nth_closure)
+}
+```
+Note that there is a high degree of indirection here. Also note that both `n` and `num_found` are accessible in the lambda, since they were **captured**. Eventually, we'll want to use the `move` keyword before the arguments list to make the closure fully take ownership of things it captures, rather than borrow them. For now, it doesn't matter, since the `i32`s we're dealing with implement the `copy` **trait**. 
+
+Wait, what's **trait**? For that, we'll first talk about `struct`s. By this point, you may want to go ahead and start a new Rust project if your *main.rs* from *hello* is geting messy. All you need to do is `cd` up out of the *hello* package, and `cargo new [package name] --bin`. 

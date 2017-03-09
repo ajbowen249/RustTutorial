@@ -32,6 +32,19 @@ fn main() {
     println!("int: {}", int);
     println!("character: {}", character);
     println!("float: {}", float);
+
+    let (value, index) = first_even_with_index(&nums);
+    println!("first even: {} at index {}", value, index);
+
+    match nums.iter().find(|x| *x % 2 == 0) {
+        Some(first) => println!("first even number in set: {}", first),
+        None => println!("All numbers in the set are odd."),
+    }
+
+    match find_nth_even(&nums, 3) {
+        Some(val) => println!("4th even number in set: {}", val),
+        None => println!("No 4th even"),
+    }
 }
 
 fn find_max(nums: &Vec<i32>) -> Result<i32, &str> {
@@ -58,4 +71,29 @@ fn first_even(nums: &Vec<i32>) -> Option<i32> {
     }
 
     None
+}
+
+fn first_even_with_index(nums: &Vec<i32>) -> (i32, usize) {
+    for i in 0..nums.len() {
+        if nums[i] % 2 == 0 {
+            return (nums[i], i);
+        }
+    }
+
+    (0, 0)
+}
+
+fn find_nth_even(nums: &Vec<i32>, n: i32) -> Option<&i32> {
+    let mut num_found = -1;
+    let found = nums.iter().find(|x| {
+        if **x % 2 == 0 {
+            num_found = num_found + 1;
+        }
+
+        num_found == n
+    });
+
+    println!("num_found: {} n: {}", num_found, n);
+
+    found
 }
