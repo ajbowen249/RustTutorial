@@ -21,6 +21,17 @@ fn main() {
         Some(first) => println!("first even number in set: {}", first),
         None => println!("All numbers in the set are odd."),
     }
+
+    let tuple = (1, 'a', "tuple", 15.35);
+    println!("tuple 0: {}", tuple.0);
+    println!("tuple 1: {}", tuple.1);
+    println!("tuple 2: {}", tuple.2);
+    println!("tuple 3: {}", tuple.3);
+
+    let (int, character, float) = (12, 'b', 1.23);
+    println!("int: {}", int);
+    println!("character: {}", character);
+    println!("float: {}", float);
 }
 
 fn find_max(nums: &Vec<i32>) -> Result<i32, &str> {
