@@ -2,9 +2,10 @@
 
 This is a very high-level overview of some basic Rust concepts for ++Time. Most of the examples here are ~~stolen from~~ inspired by the [The Rust Programming Language](https://doc.rust-lang.org/book/) (nicknamed "the book"), the de facto documenentation on Rust. Here are some additional resources:
 - [Rust By Example](http://rustbyexample.com/)
-- [Are We (I)DE yet?](https://areweideyet.com/)
-- [Are we Web yet?](http://www.arewewebyet.org/)
-- [Are we Game yet?](http://arewegameyet.com/)
+- [Are We (I)DE Yet?](https://areweideyet.com/)
+- [Are We Web Yet?](http://www.arewewebyet.org/)
+- [Are We Game Yet?](http://arewegameyet.com/)
+- [Are We Learning Yet?](http://www.arewelearningyet.com/)
 
 ### Installation
 #### Linux/Mac
@@ -155,8 +156,7 @@ fn find_max(nums: &Vec<i32>) -> i32 {
     max
 }
 ```
-
-That's more like it. `find_max` takes a `&Vec<i32>` and returns the maximum `i32` that it finds. Note the `*` in `if *num > max {`. I fibbed a bit when I said that `&` was for borrowing. It's actually a more generalized operator for taking **references**. As you can guess from the `*`, the semantics of pointers and references are similar in concept to the same things in C/C++. When we use the `for` loop with `nums` as the iterator, `num` is now a pointer to a value in `nums` each iteration, so we need to dereference it to get the value we're pointing to. 
+That's more like it. `find_max` takes a `&Vec<i32>` and returns the maximum `i32` that it finds. Note the `*` in `if *num > max {`. I fibbed a bit when I said that `&` was for borrowing. It's actually a more generalized operator for taking **references**. As you can guess from the `*`, the semantics of pointers and references are similar in concept to C/C++. When we use the `for` loop with `nums` as the iterator, `num` is now a pointer to a value in `nums` each iteration, so we need to dereference it to get the value we're pointing to. 
 
 What happens if we were to call `find_max` with an empty vector? With the current implementation, we'll get the minimum i32...sounds pretty dumb. We can do better using another Rusty concept. Here's another new *main.rs*:
 ```rust
