@@ -1,6 +1,10 @@
 # ++Time Rust Tutorial
 
-This is a very high-level overview of some basic Rust concepts for ++Time. Most of the examples here are ~~stolen from~~ inspired by the [The Rust Programming Language](https://doc.rust-lang.org/book/) (nicknamed "the book").
+This is a very high-level overview of some basic Rust concepts for ++Time. Most of the examples here are ~~stolen from~~ inspired by the [The Rust Programming Language](https://doc.rust-lang.org/book/) (nicknamed "the book"), the de facto documenentation on Rust. Here are some additional resources:
+- [Rust By Example](http://rustbyexample.com/)
+- [Are We (I)DE yet?](https://areweideyet.com/)
+- [Are we Web yet?](http://www.arewewebyet.org/)
+- [Are we Game yet?](http://arewegameyet.com/)
 
 ### Installation
 #### Linux/Mac
@@ -52,7 +56,7 @@ Rust's basic syntax is primarily c-like. Add this to your *main.rs*:
 
     println!("{} + {} = {}", x, y, z);
 ```
-Again, this is all pretty self-explanatory, and the interesting part is in the `println`. Rust macros that facilitate string formatting usually take a variadic set of arguments following the pattern string that are inserted in place of the `{}` in the format string in order. The macro system and the compiler are clever enough to give you a compiler error if you supply the wrong number of arguments or a type that has no default string representation. 
+Again, this is all pretty self-explanatory, and the interesting part is, again, in the `println!`. Rust macros that facilitate string formatting usually take a variadic set of arguments following the pattern string that are inserted in place of the `{}` in the format string in order. The macro system and the compiler are clever enough to give you a compiler error if you supply the wrong number of arguments or a type that has no default string representation. 
 
 X, y, and z are all integers, specifically `i32`s. When declaring variables of primitive types, Rust has a few default types. You could have declared x with:
 ```rust
