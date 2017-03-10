@@ -328,7 +328,7 @@ struct Person {
     birth_year: i16,
 }
 ```
-You'll get a bunch of compiler warnings about thigs not being done, and running it won't produce any output. `struct`s in Rust are very similar (at first) to `struct`s in Go, in the sense that definition is minimal, `struct` methods look more like extension methods from other langauges, and there is no language-specific pattern for constructors. Note that our `sturct` is called `Person` with a capitol "P". `struct`s in Rust are one of the few things that are typically CamelCased. In our `main()`, we allocate a new `Person` on the stack and assign to its fields. For now, ignore the `.to_string()` call for the literals. `String`s in Rust are pretty complicated, and I won't go too deep in this tutorial.
+You'll get a bunch of compiler warnings about thigs not being used, and running it won't produce any output. `struct`s in Rust are very similar (at first) to `struct`s in Go, in the sense that definition is minimal, `struct` methods look more like extension methods from other langauges, and there is no language-specific pattern for constructors. Note that our `sturct` is called `Person` with a capitol "P". `struct`s in Rust are one of the few things that are typically CamelCased. In our `main()`, we allocate a new `Person` on the stack and assign to its fields. For now, ignore the `.to_string()` call for the literals. `String`s in Rust are pretty complicated, and I won't go too deep in this tutorial.
 
 Let's actually do something. Add this to the end of your file:
 ```rust
