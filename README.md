@@ -1,23 +1,6 @@
 # ++Time Rust Tutorial
 
-### Outline:
-
-#### Introduction:
-- Installation [DONE]
-- Cargo [DONE]
-- Hello World [DONE]
-- Mutability [DONE]
-- Functions [DONE]
-- Moving, Borrowing, Lifetimes [DONE]
-- Traits [DONE]
-
-#### What makes Rust Rust
-- Options / Results (Parse command line input) [DONE]
-- Match [DONE]
-
-#### Example
-- Pull together concepts
-- Introduce thread constructs
+This is a very high-level overview of some basic Rust concepts for ++Time. Most of the examples here are ~~stolen from~~ inspired by the [The Rust Programming Language](https://doc.rust-lang.org/book/) (nicknamed "the book").
 
 ### Installation
 #### Linux/Mac
@@ -449,3 +432,60 @@ It's complaining because our function signature is `fn return_first<'a>(obj1: &'
 fn return_first<'a, 'b>(obj1: &'a HasName, obj2: &'b HasName) -> &'a HasName {
 ```
 This now declares a second lifetime, b. Note that it doesn't necessarily describe how long anything actually lives, just that they're different. This code will work fine now, but if you were to change our return lifetime to b and return `obj2`, you would now get a compiler error complaining that `spike` does not live as long as the `dog` reference it could be assigned to. 
+
+### The Sieve of Eratosthenes
+Here's an example that brings together a few Rust concepts. Make another binary package with `cargo new example --bin` and paste this over *main.rs*:
+```rust
+use std::thread;
+use std::sync::{Arc, Mutex};
+
+fn main() {
+    let size: usize = 4099; //If you get a panic when you try to run, lower this number
+    let half_size: usize = size / 2;
+    let non_primes = Box::new(vec![false;size]);
+
+    let mut threads = vec![];
+    let non_primes_mutex = Arc::new(Mutex::new(non_primes));
+
+    for i in 2..half_size {
+        let non_primes_mutex = non_primes_mutex.clone();
+        threads.push(thread::spawn(move || {
+            let base = i as usize;
+            let mut current = base * 2;
+            loop {
+                if current >= size {
+                    break;
+                }
+
+                match non_primes_mutex.lock() {
+                    Ok(mut non_primes_value) => {
+                        (*non_primes_value)[current] = true;
+                        current = current + base;
+                    },
+                    Err(err) => println!("non-primes acccess error {}", err),
+                }
+            }
+        }));
+    }
+
+    for thread in threads {
+        let _ = thread.join();
+    }
+
+    let mut num_primes = 0;
+    
+    match non_primes_mutex.lock() {
+        Ok(non_primes_value) => {
+            for i in 2..(*non_primes_value).len() {
+                if !(*non_primes_value)[i] {
+                    println!("{}", i);
+                    num_primes = num_primes + 1
+                }
+            }
+        },
+        Err(err) => println!("non-primes acccess error {}", err),
+    }
+
+    println!("{} primes between 0 and {}.", num_primes, size);
+}
+```
