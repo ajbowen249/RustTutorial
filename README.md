@@ -8,8 +8,8 @@
 - Hello World [DONE]
 - Mutability [DONE]
 - Functions [DONE]
-- Moving, Borrowing, Lifetimes
-- Traits
+- Moving, Borrowing, Lifetimes [DONE]
+- Traits [DONE]
 
 #### What makes Rust Rust
 - Options / Results (Parse command line input) [DONE]
@@ -398,4 +398,54 @@ impl HasName for Person {
 
 Now you can call `print_name(&fred)` in `main()`. If you added another struct, say:
 ```rust
+struct Dog {
+    name: String
+}
+
+impl HasName for Dog {
+    fn get_name(&self) -> String {
+        format!("{}", self.name)
+    }
+}
 ```
+You could then call the same `print_name` method in `main()` with:
+```rust
+    let fido = Dog {name: "Fido".to_string()};
+    print_name(&fido);
+```
+About what you would expect from an interface.
+
+The last big Rust concept we'll talk about is the **lifetime**. **Lifetime**s are another massive syntactical feature that help Rust with its safety. `struct`s and `fn`s can declare lifetimes for anything that they recieve a reference to. Add this function:
+```rust
+fn return_first<'a>(obj1: &'a HasName, obj2: &'a HasName) -> &'a HasName {
+    obj1
+}
+```
+What's up with all these `'a`s? Every reference here is actually a "reference to a struct that implements HasName with lifetime a." Every function you've implemented has lifetimes behind the scenes, but they've been simple enough that the compiler allows you to **elide** them. Whenever a function **borrow**s something, the compiler must guarantee that the thing given to it will outlive the function itself. Add this code to `main()`:
+```rust
+    let snoopy = Dog {name: "Snoopy".to_string()};
+    let dog;
+    {
+        let spike = Dog {name: "Spike".to_string()};
+        dog = return_first(&snoopy, &spike);
+    }
+
+    print_name(dog);
+```
+Try to run, and you'll get a compiler error:
+
+    error: `spike` does not live long enough
+      --> src/main.rs:21:5
+       |
+    20 |         dog = return_first(&snoopy, &spike);
+       |                                      ----- borrow occurs here
+    21 |     }
+       |     ^ `spike` dropped here while still borrowed
+    ...
+    24 | }
+       | - borrowed value needs to live until here
+It's complaining because our function signature is `fn return_first<'a>(obj1: &'a HasName, obj2: &'a HasName) -> &'a HasName {`. We say that we take two arguments with lifetime a, and return something with lifetime a. `spike` only lives as long as it's in scope, and it goes out of scope right after we assign to `dog`. If we had done this in a language like C, we would have a pointer to a `dog` that had been popped off the stack and trying to print later we'd explode. `snoopy` is fine, because he lives longer than `dog`. To get this to compile, change our function signature to:
+```rust
+fn return_first<'a, 'b>(obj1: &'a HasName, obj2: &'b HasName) -> &'a HasName {
+```
+This now declares a second lifetime, b. Note that it doesn't necessarily describe how long anything actually lives, just that they're different. This code will work fine now, but if you were to change our return lifetime to b and return `obj2`, you would now get a compiler error complaining that `spike` does not live as long as the `dog` reference it could be assigned to. 

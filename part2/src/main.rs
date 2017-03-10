@@ -12,10 +12,23 @@ fn main() {
 
     let fido = Dog {name: "Fido".to_string()};
     print_name(&fido);
+
+    let snoopy = Dog {name: "Snoopy".to_string()};
+    let dog;
+    {
+        let spike = Dog {name: "Spike".to_string()};
+        dog = return_first(&snoopy, &spike);
+    }
+
+    print_name(dog);
 }
 
 fn print_name(nameable: &HasName) {
     println!("{}", nameable.get_name());
+}
+
+fn return_first<'a, 'b>(obj1: &'a HasName, obj2: &'b HasName) -> &'a HasName {
+    obj1
 }
 
 trait HasName {
