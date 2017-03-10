@@ -329,4 +329,73 @@ fn find_nth_even(nums: &Vec<i32>, n: i32) -> Option<&i32> {
 ```
 Note that there is a high degree of indirection here. Also note that both `n` and `num_found` are accessible in the lambda, since they were **captured**. Eventually, we'll want to use the `move` keyword before the arguments list to make the closure fully take ownership of things it captures, rather than borrow them. For now, it doesn't matter, since the `i32`s we're dealing with implement the `copy` **trait**. 
 
-Wait, what's **trait**? For that, we'll first talk about `struct`s. By this point, you may want to go ahead and start a new Rust project if your *main.rs* from *hello* is geting messy. All you need to do is `cd` up out of the *hello* package, and `cargo new [package name] --bin`. 
+Wait, what's **trait**? For that, we'll first talk about `struct`s. By this point, you may want to go ahead and start a new Rust project if your *main.rs* from *hello* is geting messy. All you need to do is `cd` up out of the *hello* package, and `cargo new [package name] --bin`. Copy this over your new *main.rs*:
+```rust
+fn main() {
+    let fred = Person {
+        first_name: "Fred".to_string(),
+        last_name: "Sanford".to_string(),
+        birth_year: 1908,
+    };
+}
+
+struct Person {
+    first_name: String,
+    last_name: String,
+    birth_year: i16,
+}
+```
+You'll get a bunch of compiler warnings about thigs not being done, and running it won't produce any output. `struct`s in Rust are very similar (at first) to `struct`s in Go, in the sense that definition is minimal, `struct` methods look more like extension methods from other langauges, and there is no language-specific pattern for constructors. Note that our `sturct` is called `Person` with a capitol "P". `struct`s in Rust are one of the few things that are typically CamelCased. In our `main()`, we allocate a new `Person` on the stack and assign to its fields. For now, ignore the `.to_string()` call for the literals. `String`s in Rust are pretty complicated, and I won't go too deep in this tutorial.
+
+Let's actually do something. Add this to the end of your file:
+```rust
+impl Person {
+    fn get_age(&self) -> i16 {
+        2017 - self.birth_year
+    }
+}
+```
+Call it at the end of `main()`:
+```rust
+    println!("Age: {}", fred.get_age());
+```
+
+`get_age` subtracts the `Person`'s birth year from 2017 to get their age. It takes an immutable reference to self as the first argument. Rust knows you're implementing a method for `Person` because it's in the `impl` block and you're using the `self` keyword, so there's no need to be as verbose as to give the type of `self`. Note that I said it takes an *immutable* reference to `self`. We'll need a `mut`able reference to change anything. Add this inside the `impl` block:
+```rust
+    fn set_age(&mut self, age: i16) {
+        self.birth_year = 2017 - age;
+    }
+```
+First, notice that we said we need a `&mut self`, since we intend to mutate a property. If you just add this function, it will compile. However, if you try adding, say, `fred.set_age(25)`, you'll get an error because our `fred` binding was not declared as `mut`able (`let mut fred = ...`).
+
+So, what's all this about **trait**s, then? **Trait**s are basically like interfaces, and are the closest thing Rust has to polymorphism. **Trait**s are a massive simplification and unification on what has become the incredibly complicated topic of Object-Oriented programming. Let's start off by implementing one of the many **trait**s from the standard library. Add this to the end of your file:
+```rust
+impl std::fmt::Display for Person {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{} {}, age {}", self.first_name, self.last_name, self.get_age())
+    }
+}
+```
+The `display` **trait** is used to populate the `{}` in format strings. You can now `println!("{}", fred);` in `main()`. Let's make our own trait. Add this after `main()`:
+```rust
+fn print_name(nameable: &HasName) {
+    println!("{}", nameable.get_name());
+}
+
+trait HasName {
+    fn get_name(&self) -> String;
+}
+```
+
+Add this after your `Person` definition:
+```rust
+impl HasName for Person {
+    fn get_name(&self) -> String {
+        format!("{} {}", self.first_name, self.last_name)
+    }
+}
+```
+
+Now you can call `print_name(&fred)` in `main()`. If you added another struct, say:
+```rust
+```
