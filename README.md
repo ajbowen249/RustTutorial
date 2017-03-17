@@ -1,5 +1,7 @@
 # ++Time Rust Tutorial
 
+*Disclaimer for anyone stumbling here: This is not intended as a comprehensive guide to Rust. It is an overview of the language features that I like about rust intended as in introduction to the langauge for my colleagues, and is a part of a [series of challanges and tutorials](https://github.com/ajbowen249/PlusPlusTime).*
+
 This is a very high-level overview of some basic Rust concepts for ++Time. Most of the examples here are ~~stolen from~~ inspired by the [The Rust Programming Language](https://doc.rust-lang.org/book/) (nicknamed "the book"), the de facto documenentation on Rust. Here are some additional resources:
 - [Rust By Example](http://rustbyexample.com/)
 - [Are We (I)DE Yet?](https://areweideyet.com/)
